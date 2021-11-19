@@ -5,5 +5,4 @@ trigger JogadoresTrigger on Jogador__c (before update) {
       JogadoresTriggerHandler.beforeUpdate(Trigger.new,Trigger.oldMap);
     }
   }
-
 }

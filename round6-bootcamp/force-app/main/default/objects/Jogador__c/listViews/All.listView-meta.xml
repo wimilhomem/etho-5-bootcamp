@@ -5,6 +5,7 @@
     <columns>Candidato__c</columns>
     <columns>Eliminado__c</columns>
     <columns>Round__c</columns>
+    <columns>MembroStaff__c</columns>
     <filterScope>Everything</filterScope>
     <label>Tudo</label>
 </ListView>

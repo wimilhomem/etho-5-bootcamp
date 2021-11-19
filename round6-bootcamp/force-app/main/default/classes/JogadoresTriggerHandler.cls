@@ -1,22 +1,64 @@
 public without sharing class JogadoresTriggerHandler {
-  
-    public static void beforeUpdate(List<jogador__c> records, Map<Id,Jogador__c> oldMap) {
-        for (Jogador__c jogador: records) {
-            beforeUpdate(records, oldMap.get(jogador.Id));          
-      }
-    }
-
-    private static beforeUpdate(Jogador__c record,Jogador__c recordOld) {
-        if (isChanged(recordOld.Eliminado__c, record.Eliminado__c)){
-            setValue(record,Jogador__c.DataMorte__c,System.now());           
+    public static void beforeUpdate(List<Jogador__c> records, Map<Id, Jogador__c> oldMap) {
+        for (Jogador__c jogador : records) { //realiza uma iteração
+            beforeUpdate(jogador, oldMap.get(jogador.Id));
         }
     }
 
-    private static Boolean isChanged(Boolean value, Boolean valueToCompare) {
+    private static void beforeUpdate(Jogador__c record, Jogador__c recordOld) {
+        handleEliminacaoMorte(record, recordOld);
+    }
+
+    private static Boolean isChanged(Jogador__c record, Jogador__c recordToCompare, Schema.SObjectField fieldToEvaluate) {
+        return isChanged(record.get(fieldToEvaluate), recordToCompare.get(fieldToEvaluate));
+    }
+
+    private static Boolean isChanged(Object value, Object valueToCompare) {
         return value != valueToCompare;
     }
 
     private static void setValue(Jogador__c record, Schema.SObjectField field, Object value) {
-        record.put(field,value);
+        record.put(field, value);
+    }
+
+    private static void handleEliminacaoMorte(Jogador__c record, Jogador__c recordOld) {
+       
+       
+        System.debug('função');
+        System.debug('eliminado '+foiEliminado(record, recordOld));
+        System.debug('morreu: '+morreu(record, recordOld));
+
+        if (foiEliminado(record, recordOld) || morreu(record, recordOld)) {
+                
+                //se é jogador comum e foi eliminado
+            if (ehJogadorPadrao(record) && foiEliminado(record, recordOld)) {
+                
+                setValue(record, Jogador__c.Morreu__c, true);
+                setValue(record, Jogador__c.DataMorte__c, System.now());
+
+            } else if (morreu(record, recordOld)) {//se for staff e morreu, recebe data da morte
+                System.debug('3 if');
+                setValue(record, Jogador__c.Eliminado__c, true);
+                setValue(record, Jogador__c.DataMorte__c, System.now());
+            }
+        }
+    }
+
+    private static Boolean ehJogadorPadrao(Jogador__c record) {
+        // Boolean ehJogador = true;
+        // if (record.MembroStaff__c != null) {//usar isBlank para comparar string
+        //     ehJogador = false;
+        // }
+        // return ehJogador;
+
+        return String.isBlank(record.MembroStaff__c);
+    }
+
+    private static Boolean foiEliminado(Jogador__c record,Jogador__c recordOld) {
+        return isChanged(record,recordOld, Jogador__C.Eliminado__c);
+    }
+
+    private static Boolean morreu(Jogador__c record,Jogador__c recordOld) {
+        return isChanged(record,recordOld, Jogador__c.Morreu__c);
     }
 }
