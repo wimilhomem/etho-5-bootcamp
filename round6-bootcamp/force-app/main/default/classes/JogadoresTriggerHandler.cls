@@ -1,8 +1,23 @@
 public without sharing class JogadoresTriggerHandler {
+  
+    public static void afterInsert(List<Jogador__c> records) {
+        List<Jogador__c> jogadores = [SELECT Id, Candidato__r.ValorDaDivida__c FROM Jogador__c WHERE Id IN :records];
+
+        for (Jogador__c jogador : jogadores) {
+            afterInsert(jogador);
+        }      
+
+        update jogadores;
+    }
+  
     public static void beforeUpdate(List<Jogador__c> records, Map<Id, Jogador__c> oldMap) {
         for (Jogador__c jogador : records) { //realiza uma iteração
             beforeUpdate(jogador, oldMap.get(jogador.Id));
         }
+    }
+
+    private static void afterInsert(Jogador__c record) {
+        Utils.setValue(record, Jogador__c.Divida__c, record.Candidato__r.ValorDaDivida__c);
     }
 
     private static void beforeUpdate(Jogador__c record, Jogador__c recordOld) {
@@ -22,36 +37,21 @@ public without sharing class JogadoresTriggerHandler {
     }
 
     private static void handleEliminacaoMorte(Jogador__c record, Jogador__c recordOld) {
-       
-       
-        System.debug('função');
-        System.debug('eliminado '+foiEliminado(record, recordOld));
-        System.debug('morreu: '+morreu(record, recordOld));
+            //se é jogador comum
+        if (ehJogadorPadrao(record) && foiEliminado(record, recordOld)) {
+             setValue(record, Jogador__c.Morreu__c, true);                
 
-        if (foiEliminado(record, recordOld) || morreu(record, recordOld)) {
-                
-                //se é jogador comum e foi eliminado
-            if (ehJogadorPadrao(record) && foiEliminado(record, recordOld)) {
-                
-                setValue(record, Jogador__c.Morreu__c, true);
-                setValue(record, Jogador__c.DataMorte__c, System.now());
-
-            } else if (morreu(record, recordOld)) {//se for staff e morreu, recebe data da morte
-                System.debug('3 if');
-                setValue(record, Jogador__c.Eliminado__c, true);
-                setValue(record, Jogador__c.DataMorte__c, System.now());
-            }
         }
+        if (morreu(record, recordOld)) {//se morreu, recebe data da morte
+            setValue(record, Jogador__c.Eliminado__c, true);
+            setValue(record, Jogador__c.DataMorte__c, System.now());
+        }        
     }
 
     private static Boolean ehJogadorPadrao(Jogador__c record) {
-        // Boolean ehJogador = true;
-        // if (record.MembroStaff__c != null) {//usar isBlank para comparar string
-        //     ehJogador = false;
-        // }
-        // return ehJogador;
-
-        return String.isBlank(record.MembroStaff__c);
+        return record.RecordTypeId.equals(
+            Schema.SObjectType.Jogador__c.getRecordTypeInfosByDeveloperName().get(Label.RECORD_TYPE_DEVELOPER_NAME_JOGADOR_PADRAO).getRecordTypeId()
+        );
     }
 
     private static Boolean foiEliminado(Jogador__c record,Jogador__c recordOld) {
