@@ -8,7 +8,7 @@ public with sharing class UtilsTest {
         
         Test.startTest();
         try {
-            Utils.setValue(jog, Jogador__c.Name, 'Renato');
+            Utils.setValue(jog, Jogador__c.Name, 'Wisley');
         } catch (Exception e) {
             errorMessage = e.getMessage();
         }
