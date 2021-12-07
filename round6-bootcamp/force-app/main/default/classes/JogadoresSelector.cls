@@ -11,7 +11,7 @@ public with sharing class JogadoresSelector {
         
         ];
     }
-    public static List<Jogador__c> selectJogadoresVivos() {
+    public static List<Jogador__c> selectJogadoresVivosByRoundStatus() {
         return [select ID,Forca__c,Velocidade__c,Inteligencia__c from Jogador__c 
         where
         Morreu__c = false and

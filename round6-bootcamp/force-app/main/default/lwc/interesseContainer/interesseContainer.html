@@ -1,0 +1,65 @@
+<template>
+
+    <div class="slds-panel slds-size_full slds-panel_docked slds-panel_docked-left slds-is-open" aria-hidden="false">
+      <div class="slds-panel__header slds-panel__header_align-center">
+        <h2
+        class="slds-panel__header-title slds-text-heading_small slds-truncate" 
+        title="Panel Header">
+        Cadastro de interessse em participar do Squid Game</h2>
+       
+      </div>
+      <div class="slds-panel__body">
+          <lightning-input type="text"
+          label="Nome"
+          required 
+          data-attribute-name="Name"
+          onchange={handleChange}
+          message-when-value-missing="Nome obrigatório">
+        </lightning-input>
+          <lightning-input 
+          type="tel"
+          label="Celular" 
+          required
+          data-attribute-name="Celular__c"
+          onchange={handleChange}
+          message-when-value-missing="Celular obrigatório" >
+        </lightning-input>
+          <lightning-input 
+          type="email"
+          data-attribute-name="Email__c"
+          onchange={handleChange}
+          label="Email">
+        </lightning-input>
+          <lightning-input 
+          type="number" 
+          label="Valor da dívida" 
+          required 
+          data-attribute-name="ValorDaDivida__c"
+          onchange={handleChange}
+          formatter="currency" step="0.01"
+          message-when-value-missing="Valor da dívida obrigatório">
+        </lightning-input>
+
+      </div>
+      <footer class="slds-docked-composer__footer slds-shrink-none">
+        <div class="slds-col_bump-left slds-text-align_right">
+
+          <lightning-button 
+          variant="neutral" 
+          label="Limpar" 
+          title="Limpar" 
+          onclick={handleClickLimpar}
+           class="slds-m-left_x-small"></lightning-button>
+
+           <lightning-button 
+           variant="brand" 
+           label="Enviar" 
+           title="Enviar" 
+           onclick={handleClickEnviar} class="slds-m-left_x-small"></lightning-button>
+
+        </div>
+      </footer>
+      
+    </div>
+
+</template>

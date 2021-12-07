@@ -1,0 +1,39 @@
+.container-jogadores {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+.icon-round-title{
+  --sds-c-icon-color-foreground-default:white; 
+   --sds-c-icon-color-foreground:  white; 
+   --sds-c-icon-color-background: #E61E81; 
+}
+.my-card {
+  /* --sds-c-card-spacing-inline-start:var(--sds-c-card-spacing-inline, 10px); */
+  --sds-c-card-shadow:2px 4px 6px 0 rgba(0, 0, 0, 0.5);
+   margin: 0.75em;
+  /* --sds-c-card-color-background : #34fc;  */
+
+
+}
+
+.myFotter {
+  text-align: center;
+  border-top: 1px solid #dddbda;
+  padding-top: 10px;
+}
+.myBadge {
+  --sds-c-badge-font-size:0.78rem;
+
+}
+.flex-container {
+  display: flex;
+  vertical-align: middle;
+}
+
+.flex-child {
+  flex: 1;
+}  
+
+.flex-child:first-child {
+  margin-right: 20px;
+} 

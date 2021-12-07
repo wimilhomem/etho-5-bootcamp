@@ -1,0 +1,26 @@
+<template>
+
+  <!-- <div class="slds-grid slds-wrap">
+    
+      <div key={jogador.Id} class="slds-col slds-size_1-of-4"> -->
+        <lightning-card class={jogadorClass} >
+          <h3 slot="title">
+            {jogador.Name}            
+          </h3>
+          
+       
+         <p class="slds-p-horizontal_small" if:true={isVencedor} >Vencendor !
+              <lightning-icon icon-name="utility:moneybag" title="Vencedor" size="small">
+             </lightning-icon>
+          </p>
+          <p class="slds-p-horizontal_small">Força: {jogador.Forca__c}</p>
+          <p class="slds-p-horizontal_small">Inteligência: {jogador.Inteligencia__c}</p>
+          <p class="slds-p-horizontal_small">Velocidade: {jogador.Velocidade__c}</p>
+        </lightning-card>
+
+      <!-- </div>   
+
+  </div> -->
+
+
+</template>

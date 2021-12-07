@@ -1,0 +1,39 @@
+.container-rounds {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 1rem;
+}
+
+.cardJogador {
+  
+  margin: 5px;
+  
+  --sds-c-card-radius-border:10px;
+  /* --sds-c-card-shadow:2px 4px 6px 0 rgba(0, 0, 0, 0.5); */
+  
+  --sds-c-card-color-border: #098509;
+
+  /* --sds-c-card-color-background : rgba(243, 240, 240, 0.72);  */
+  --sds-c-card-shadow:2px 4px 6px 0 rgba(0, 0, 0, 0.5);
+
+}
+.cardJogadorEliminado {
+  
+  margin: 5px;
+  
+  --sds-c-card-radius-border:10px;
+  /* --sds-c-card-shadow:2px 4px 6px 0 rgba(0, 0, 0, 0.5); */
+  
+  --sds-c-card-color-border: #b60303;
+
+  /* --sds-c-card-color-background : rgba(243, 240, 240, 0.72);  */
+  --sds-c-card-shadow:2px 4px 6px 0 rgba(0, 0, 0, 0.5);
+
+}
+
+.myBadgeJogador {
+  --sds-c-badge-font-size:0.70rem;
+  
+--sds-c-badge-line-height:"normal";
+
+}

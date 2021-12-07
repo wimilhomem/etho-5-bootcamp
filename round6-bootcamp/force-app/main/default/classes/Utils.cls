@@ -17,22 +17,21 @@ public with sharing class Utils {
     public static integer generateRandomIntegerBetween(Integer x, Integer y) {
 
 
-       return generateRandomNumber(x,y);
+       return generateRandomNumber(x,y).intValue();
     }
 
-    public static Integer generateRandomNumber(Integer min, Integer max) {
+    public static Decimal generateRandomNumber(Integer min, Integer max) {
         
-        return Math.floor(Math.random()*(max-min+1)+min).intValue();
+        return Math.floor(Math.random()*(max-min+1)+min);
     }
 
-    public static Integer getD20() {
-
-        return generateRandomNumber(1,20);
-    }
-
-    public static Integer getD10() {
-
-        return generateRandomNumber(1,10);
+    public static String cronString(Integer addMinutes) {
+        Datetime now  = Datetime.now();
+        Datetime nextRunTime = now.addMinutes(addMinutes);
+        return 
+            '' + nextRunTime.second() + ' ' + nextRunTime.minute() + ' ' + 
+            nextRunTime.hour() + ' ' + nextRunTime.day() + ' ' + 
+            nextRunTime.month() + ' ? ' + nextRunTime.year();
     }
 
 
