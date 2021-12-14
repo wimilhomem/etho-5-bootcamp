@@ -17,6 +17,7 @@ global class CalloutCandidatoHeroku {
             listCandidatos = (List<Candidato>) JSON.deserialize(response.getBody(), List<Candidato>.class);
 
         }
+        //lwc quickaction quickview
 
         return listCandidatos;
 

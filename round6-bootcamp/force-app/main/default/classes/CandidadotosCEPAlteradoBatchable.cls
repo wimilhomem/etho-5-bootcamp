@@ -12,18 +12,19 @@ public with sharing class CandidadotosCEPAlteradoBatchable implements Batchable 
      }
   
      public void execute(Database.BatchableContext BC, List<sObject> scope){
-      
-        
-        
-        for(sobject s : scope){
-       s.put(Field,Value); 
+              
+       for(sobject s : scope){
+        s.put(Field,Value); 
        }
        update scope;
 
 
-       for(Id key: accountMap.keySet()){
-        System.debug('Account: ' + accountMap.get(key));
-    }
+       for(Object key: fieldsValuesMap.keySet()){
+       
+        key.put(key,fieldsValuesMap.get(key));
+        
+        }
+        update scope;
       }
   
      public void finish(Database.BatchableContext BC){

@@ -1,5 +1,5 @@
 public with sharing class CustomNotification {
-
+    
     public static void sendNotifications(String strBody, String strSenderId, String strTargetId, String strTitle, String strNotificationId, set<String> setUserIds) {
        
         Messaging.CustomNotification obj = new Messaging.CustomNotification();
