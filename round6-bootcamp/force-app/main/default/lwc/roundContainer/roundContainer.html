@@ -1,0 +1,48 @@
+<template>
+
+  <div>
+
+    <lightning-card class="my-card">
+
+      <div slot="title" >        
+        <div class="slds-grid slds-gutters">
+          <div class="slds-col">
+            <h3 slot="title">
+              <lightning-icon class="icon-round-title" icon-name="custom:custom60" alternative-text="Round title"
+                title="Round title" size="small">
+              </lightning-icon>
+              {round.Name}
+              <lightning-badge class="myBadge" label={round.Status__c}></lightning-badge>
+            </h3>
+          </div>
+          <div class="slds-col">           
+          </div>
+          <div class="slds-col">                    
+            <lightning-input placeholder="Buscar jogador"  variant="label-hidden" onchange={handleChange} data-attribute-name="Name" >              
+            </lightning-input>
+          </div>
+        </div>
+           
+      </div>
+
+      
+      <div id="body" class="slds-grid slds-wrap">
+     
+        
+        <template for:each={jogadoresFiltrados} for:item="jogador">
+          
+          <c-jogador-container key={jogador.Id} vencedor={round.Vencedor__c} jogador={jogador}></c-jogador-container>
+
+      </template>
+      
+    </div>
+
+      <div slot="footer" class="myFotter">
+        <b>Prêmio: {round.PremioTotal__c} </b>
+      </div>
+    </lightning-card>
+
+
+  </div>
+
+</template>

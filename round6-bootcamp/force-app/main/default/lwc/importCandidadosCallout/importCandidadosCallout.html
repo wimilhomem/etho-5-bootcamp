@@ -1,0 +1,39 @@
+<!-- sldsValidatorIgnore -->
+<template>
+<!-- sldsValidatorIgnoreNextLine -->
+    
+    <lightning-quick-action-panel header="Importar Candidatos">
+       <div>
+        <lightning-input
+                max-length="3" 
+                label="Quantidade de candidatos a importar" 
+                type="number"
+                data-attribute-name="quantidade"
+                onchange={handleChange}
+            >
+            </lightning-input>
+
+          </div>
+          <div slot="footer">
+            <lightning-button
+                variant="brand"
+                label="Fechar"
+                class="slds-m-left_x-small"
+                onclick={handleClose}
+            >
+            </lightning-button>
+              
+            <lightning-button
+                variant="brand"
+                label="Inserir"
+                class="slds-m-left_x-small"
+                onclick={handleClickEnviar}
+            >
+        </lightning-button>
+        </div>
+    </lightning-quick-action-panel>
+  
+
+  
+    
+</template>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>VotosProsseguir__c</fullName>
+    <description>contagem dos jogadores para voltar ao jogo</description>
+    <externalId>false</externalId>
+    <inlineHelpText>contagem dos jogadores para voltar ao jogo</inlineHelpText>
+    <label>Votos Prosseguir</label>
+    <summaryFilterItems>
+        <field>Jogador__c.RetornaJogo__c</field>
+        <operation>equals</operation>
+        <value>Sim</value>
+    </summaryFilterItems>
+    <summaryForeignKey>Jogador__c.Round__c</summaryForeignKey>
+    <summaryOperation>count</summaryOperation>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

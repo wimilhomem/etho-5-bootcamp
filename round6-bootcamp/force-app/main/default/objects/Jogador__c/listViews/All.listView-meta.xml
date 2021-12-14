@@ -6,6 +6,8 @@
     <columns>Eliminado__c</columns>
     <columns>Round__c</columns>
     <columns>MembroStaff__c</columns>
-    <filterScope>Everything</filterScope>
+    <columns>Morreu__c</columns>
+    <columns>DataMorte__c</columns>
+    <filterScope>Mine</filterScope>
     <label>Tudo</label>
 </ListView>

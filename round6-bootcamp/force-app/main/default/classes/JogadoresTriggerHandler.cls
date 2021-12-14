@@ -1,8 +1,80 @@
 public without sharing class JogadoresTriggerHandler {
+  
+    public static void afterInsert(List<Jogador__c> records) {
+        List<Jogador__c> jogadores = [SELECT Id, Candidato__r.ValorDaDivida__c FROM Jogador__c WHERE Id IN :records];
+
+        for (Jogador__c jogador : jogadores) {
+            afterInsert(jogador);
+        }      
+
+        update jogadores;
+    }
+  
     public static void beforeUpdate(List<Jogador__c> records, Map<Id, Jogador__c> oldMap) {
         for (Jogador__c jogador : records) { //realiza uma iteração
             beforeUpdate(jogador, oldMap.get(jogador.Id));
         }
+    }
+
+    public static void afterUpdate(List<Jogador__c> records, Map<Id, Jogador__c> oldMap) {
+        Set<String> statusList = new Set<String>{'Em Andamento'};
+        Map<Id, Round__c> roundsMap = new Map<Id, Round__c>(RoundsSelector.selectRoundsByIdStatusJogadoresVivos(Utils.getSetIds(records, Jogador__c.Round__c), statusList));
+        System.debug('roundsMap: ' + JSON.serialize(roundsMap));
+        Map<Id, Round__c> roundsToUpdate = new Map<Id, Round__c>();
+        for (Jogador__c record : records) {
+            System.debug('record: ' + JSON.serialize(record));
+            Jogador__c recordOld = oldMap.get(record.Id);
+            System.debug('recordOld: ' + JSON.serialize(recordOld));
+            Round__c roundRelacionadoAoRecord = roundsMap.get(record.Round__c);
+            System.debug('roundRelacionadoAoRecord: ' + JSON.serialize(roundRelacionadoAoRecord));
+            
+            afterUpdate(record, recordOld, roundRelacionadoAoRecord, roundsToUpdate);
+        }
+
+        System.debug('VAI DAR UPDATE EM: ' + JSON.serialize(roundsToUpdate.values()));
+
+        update roundsToUpdate.values();
+    }
+
+    private static void afterUpdate(Jogador__c record, Jogador__c recordOld, Round__c roundRecord, Map<Id, Round__c> roundsToUpdate) {
+
+        handleVencedor(record, roundRecord, roundsToUpdate);
+
+    }
+    @TestVisible
+    private static void handleVencedor(Jogador__c record, Round__c roundRecord, Map<Id, Round__c> roundsToUpdate) {
+        if (roundRecord != null) {
+            System.debug('handle vencedor');
+            System.debug('roundsToUpdate.containsKey(roundRecord.Id): ' + (roundsToUpdate.containsKey(roundRecord.Id)));
+            System.debug('roundRecord.Jogadores2__r.size() == 1: ' + (roundRecord.Jogadores__r.size() == 1));
+            if (!roundsToUpdate.containsKey(roundRecord.Id) && roundRecord.Jogadores__r.size() == 1) {
+                System.debug('ENTROUUUU BORA SETAR O VENCEDOR FILHA DAS PUTA');
+    
+                List<Jogador__c> jogadoresRound = roundRecord.Jogadores__r;
+                System.debug('jogadores desse round: ' + JSON.serialize(jogadoresRound));
+                Jogador__c vencedor = jogadoresRound.get(0);
+                System.debug('vencedor: ' + JSON.serialize(vencedor));
+                Id roundRecordId = roundRecord.Id;
+                System.debug('roundRecordId: ' + roundRecordId);
+                Round__c roundUpdated = new Round__c();
+                roundUpdated.Id = roundRecord.Id;
+                roundUpdated.Vencedor__c = vencedor.Id;
+                roundUpdated.Status__c = 'Finalizado';
+                System.debug('roundUpdated: ' + JSON.serialize(roundUpdated));
+    
+                roundsToUpdate.put(roundUpdated.Id, roundUpdated);
+    
+                System.debug('roundsToUpdate: ' + JSON.serialize(roundsToUpdate));
+            }
+        }
+    }
+
+
+
+
+
+    private static void afterInsert(Jogador__c record) {
+        Utils.setValue(record, Jogador__c.Divida__c, record.Candidato__r.ValorDaDivida__c);
     }
 
     private static void beforeUpdate(Jogador__c record, Jogador__c recordOld) {
@@ -17,41 +89,23 @@ public without sharing class JogadoresTriggerHandler {
         return value != valueToCompare;
     }
 
-    private static void setValue(Jogador__c record, Schema.SObjectField field, Object value) {
-        record.put(field, value);
-    }
-
+ 
     private static void handleEliminacaoMorte(Jogador__c record, Jogador__c recordOld) {
-       
-       
-        System.debug('função');
-        System.debug('eliminado '+foiEliminado(record, recordOld));
-        System.debug('morreu: '+morreu(record, recordOld));
+            //se é jogador comum
+        if (ehJogadorPadrao(record) && foiEliminado(record, recordOld)) {
+             Utils.setValue(record, Jogador__c.Morreu__c, true);                
 
-        if (foiEliminado(record, recordOld) || morreu(record, recordOld)) {
-                
-                //se é jogador comum e foi eliminado
-            if (ehJogadorPadrao(record) && foiEliminado(record, recordOld)) {
-                
-                setValue(record, Jogador__c.Morreu__c, true);
-                setValue(record, Jogador__c.DataMorte__c, System.now());
-
-            } else if (morreu(record, recordOld)) {//se for staff e morreu, recebe data da morte
-                System.debug('3 if');
-                setValue(record, Jogador__c.Eliminado__c, true);
-                setValue(record, Jogador__c.DataMorte__c, System.now());
-            }
         }
+        if (morreu(record, recordOld)) {//se morreu, recebe data da morte
+            Utils.setValue(record, Jogador__c.Eliminado__c, true);
+            Utils.setValue(record, Jogador__c.DataMorte__c, System.now());
+        }        
     }
 
     private static Boolean ehJogadorPadrao(Jogador__c record) {
-        // Boolean ehJogador = true;
-        // if (record.MembroStaff__c != null) {//usar isBlank para comparar string
-        //     ehJogador = false;
-        // }
-        // return ehJogador;
-
-        return String.isBlank(record.MembroStaff__c);
+        return record.RecordTypeId.equals(
+            Schema.SObjectType.Jogador__c.getRecordTypeInfosByDeveloperName().get(Label.RECORD_TYPE_DEVELOPER_NAME_JOGADOR_PADRAO).getRecordTypeId()
+        );
     }
 
     private static Boolean foiEliminado(Jogador__c record,Jogador__c recordOld) {

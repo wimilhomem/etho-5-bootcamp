@@ -1,0 +1,22 @@
+<aura:component
+ implements="force:lightningQuickActionWithoutHeader,force:hasRecordId"
+ controller="CandidatoCEPController" >
+
+  <aura:attribute name="recordId" type="String" />
+  <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+  <aura:attribute name="cep" type="String" default="77000000" />
+ 
+  
+  <div>
+    <lightning:input
+      aura:id="inputCEP"
+      type="text"
+      name="inputCEP" 
+      value="{!v.cep}"
+      label="CEP"
+      required
+      placeholder="digita o cep"
+    />
+    
+  </div>
+</aura:component>	
