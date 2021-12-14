@@ -11,7 +11,7 @@ public with sharing class InteresseController {
             insert candidato;
             
         } catch (Exception e) {
-               throw new AuraHandledException(e.getMessage( ));         
+               throw new AuraHandledException(e.getMessage());         
         }
         
     }

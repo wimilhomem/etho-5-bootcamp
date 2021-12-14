@@ -9,6 +9,7 @@ export default class ResultadoRoundContainer extends LightningElement {
 
     let lista = new Array();
 
+    let listVencedores= [];
     lista = this.round;
     
     if (this.round) {

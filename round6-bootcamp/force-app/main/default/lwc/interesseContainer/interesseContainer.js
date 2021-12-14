@@ -23,6 +23,7 @@ export default class InteresseContainer extends LightningElement {
   handleClickEnviar() {
     console.log(JSON.stringify(this.candidato)); 
     //TODO: validar candidato vazio 
+    if (this.candidato.Name && this.candidato.ValorDaDivida__c) {
     insertCandidato ({ candidato : this.candidato })
         .then(result => {
                                               
@@ -47,6 +48,7 @@ export default class InteresseContainer extends LightningElement {
 
         });
 }
+  }
 }
 
 /**
